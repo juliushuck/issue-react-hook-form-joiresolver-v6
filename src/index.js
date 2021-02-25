@@ -6,23 +6,21 @@ import Joi from "joi";
 
 import "./styles.css";
 
-const schema = Joi.object({
-  username: Joi.string().required()
-});
-
 export default function App() {
+  const schema = Joi.object({
+    username: Joi.string().valid("asdf").required()
+  });
+
   const { register, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema)
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = (values) => {
     try {
-      await schema.validateAsync(values);
-      alert("No error");
+      console.log(schema.validate(values)); // Printing the username error
+      alert("No error"); // No error alert is shwon
     } catch(e) {
-        // Got an error, but not the expected error, I think it's a Joi issue
-        // Getting: TypeError: Cannot read property 'defaults' of undefined
-        alert(e);
+      alert(e);
     }
   };
 
