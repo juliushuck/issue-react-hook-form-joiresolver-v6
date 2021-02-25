@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import Joi from "@hapi/joi";
+import Joi from "joi";
 
 import "./styles.css";
 
@@ -15,8 +15,15 @@ export default function App() {
     resolver: joiResolver(schema)
   });
 
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
+  const onSubmit = async (values) => {
+    try {
+      await schema.validateAsync(values);
+      alert("No error");
+    } catch(e) {
+        // Got an error, but not the expected error, I think it's a Joi issue
+        // Getting: TypeError: Cannot read property 'defaults' of undefined
+        alert(e);
+    }
   };
 
   return (
